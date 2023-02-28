@@ -79,118 +79,118 @@ function App() {
           <div className="counter">
           {flagsArr.map((flag, index) => {
             return (
-              <div key={index} className="flag">{flag}</div>
+              <div key={index} className="item counter-item">{flag}</div>
             )}
           )}
           </div>
 
-          <button type='button' onClick={restart}>{buttonState}</button>
+          <button className="button" type='button' onClick={restart}>{buttonState}</button>
 
           <div className="counter">
           {timeArr.map((time, index) => {
             return (
-              <div key={index} className="time">{time}</div>
+              <div key={index} className="item counter-item">{time}</div>
             )}
           )}
           </div>
         </div>
 
-        <div>
-        {array.map((_, y) => {
-          return (
-          <div key={y} className="line">
-            {array.map((_, x) => {
-              return (
-              <div
-                key={x}
-                className="item"
+        <div className="field">
+          {array.map((_, y) => {
+            return (
+            <div key={y} className="line">
+              {array.map((_, x) => {
+                return (
+                <div
+                  key={x}
+                  className="item field-item"
 
-                onMouseDown={() => {
-                  if (loose) return;
+                  onMouseDown={() => {
+                    if (loose) return;
 
-                  if (firstX === null && firstY === null) {
-                    setFirstX(x);
-                    setFirstY(y);
-                    setCounting(true);
-                  }
-
-                  setButtonState('??');
-                }}
-
-                onClick={() => {
-                  if (loose) return;
-
-                  setButtonState('OK');
-
-                  if (itemView[y * size + x] === closedItemValue.notClosed) return;
-
-                  const openingArr = [];
-
-                  function openItem(x, y) {
-                    if (x >= 0 && x < size && y >= 0 && y < size) {
-                      if (itemView[y * size + x] === closedItemValue.notClosed) return;
-                      openingArr.push([x, y]);
+                    if (firstX === null && firstY === null) {
+                      setFirstX(x);
+                      setFirstY(y);
+                      setCounting(true);
                     }
-                  }
 
-                  openItem(x, y);
+                    setButtonState('??');
+                  }}
 
-                  while (openingArr.length) {
-                    const [x, y] = openingArr.pop();
-                    itemView[y * size + x] = closedItemValue.notClosed;
-                    if (field[y * size + x] !== 0) continue;
-                    openItem(x + 1, y);
-                    openItem(x - 1, y);
-                    openItem(x, y + 1);
-                    openItem(x, y - 1);
-                  }
+                  onClick={() => {
+                    if (loose) return;
 
-                  if (field[y * size + x] === bomb) {
-                    field.forEach((item, index) => {
-                      if (item === bomb) {
-                        itemView[index] = closedItemValue.notClosed;
+                    setButtonState('OK');
+
+                    if (itemView[y * size + x] === closedItemValue.notClosed) return;
+
+                    const openingArr = [];
+
+                    function openItem(x, y) {
+                      if (x >= 0 && x < size && y >= 0 && y < size) {
+                        if (itemView[y * size + x] === closedItemValue.notClosed) return;
+                        openingArr.push([x, y]);
                       }
-                    })
-                    setCounting(false);
-                    setLoose(true);
-                  }
+                    }
 
-                  setItemView((prev) => [...prev]);
-                }}
+                    openItem(x, y);
 
-                onContextMenu={(e) => {
-                  if (loose) return;
+                    while (openingArr.length) {
+                      const [x, y] = openingArr.pop();
+                      itemView[y * size + x] = closedItemValue.notClosed;
+                      if (field[y * size + x] !== 0) continue;
+                      openItem(x + 1, y);
+                      openItem(x - 1, y);
+                      openItem(x, y + 1);
+                      openItem(x, y - 1);
+                    }
 
-                  e.preventDefault();
-                  e.stopPropagation();
+                    if (field[y * size + x] === bomb) {
+                      field.forEach((item, index) => {
+                        if (item === bomb) {
+                          itemView[index] = closedItemValue.notClosed;
+                        }
+                      })
+                      setCounting(false);
+                      setLoose(true);
+                    }
 
-                  if (firstX === null && firstY === null) {
-                    setCounting(false);
-                  }
+                    setItemView((prev) => [...prev]);
+                  }}
 
-                  if (itemView[y * size + x] === closedItemValue.notClosed) return;
+                  onContextMenu={(e) => {
+                    if (loose) return;
 
-                  if (itemView[y * size + x] === closedItemValue.closed) {
-                    itemView[y * size + x] = closedItemValue.flag;
-                    setFlags((flags) => flags > 0 ? flags -= 1 : 0);
-                  } else if (itemView[y * size + x] === closedItemValue.flag) {
-                    itemView[y * size + x] = closedItemValue.question;
-                    setFlags((flags) => flags < 40 ? flags += 1 : 40);
-                  } else if (itemView[y * size + x] === closedItemValue.question) {
-                    itemView[y * size + x] = closedItemValue.closed;
-                  }
+                    e.preventDefault();
+                    e.stopPropagation();
 
-                  setItemView((prev) => [...prev]);
-                }}
-                >
-                  {itemView[y * size + x] !== closedItemValue.notClosed ?
-                  itemView[y * size + x] :
-                  field[y * size + x]}
-              </div>
-              );
-            })}
-          </div>)
-        })}
+                    if (firstX === null && firstY === null) {
+                      setCounting(false);
+                    }
+
+                    if (itemView[y * size + x] === closedItemValue.notClosed) return;
+
+                    if (itemView[y * size + x] === closedItemValue.closed) {
+                      itemView[y * size + x] = closedItemValue.flag;
+                      setFlags((flags) => flags > 0 ? flags -= 1 : 0);
+                    } else if (itemView[y * size + x] === closedItemValue.flag) {
+                      itemView[y * size + x] = closedItemValue.question;
+                      setFlags((flags) => flags < 40 ? flags += 1 : 40);
+                    } else if (itemView[y * size + x] === closedItemValue.question) {
+                      itemView[y * size + x] = closedItemValue.closed;
+                    }
+
+                    setItemView((prev) => [...prev]);
+                  }}
+                  >
+                    {itemView[y * size + x] !== closedItemValue.notClosed ?
+                    itemView[y * size + x] :
+                    field[y * size + x]}
+                </div>
+                );
+              })}
+            </div>)
+          })}
         </div>
       </div>
     </div>
