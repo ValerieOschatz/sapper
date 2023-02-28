@@ -1,51 +1,15 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 
+import createGameField from './utils/createGameField';
+
+import {
+  size,
+  bomb,
+  closedItemValue,
+} from './utils/variables';
+
 function App() {
-  const size = 16;
-  const bomb = 'B';
-  const bombQnt = 30;
-
-  function createGameField(firstX, firstY) {
-    const field = new Array(size * size).fill(0);
-  
-    function increment(x, y) {
-      if (x >= 0 && x < size && y >= 0 && y < size) {
-        if (field[y * size + x] === bomb) return;
-        field[y * size + x] += 1;
-      }
-    }
-  
-    for (let i = 0; i <= bombQnt;) {
-      const x = Math.floor(Math.random() * size);
-      const y = Math.floor(Math.random() * size);
-  
-      if (field[y * size + x] === bomb || (x === firstX && y === firstY)) continue;
-  
-      field[y * size + x] = bomb;
-  
-      i += 1;
-  
-      increment(x + 1, y);
-      increment(x - 1, y);
-      increment(x, y + 1);
-      increment(x, y - 1);
-      increment(x + 1, y - 1);
-      increment(x - 1, y - 1);
-      increment(x + 1, y + 1);
-      increment(x - 1, y + 1);
-    }
-  
-    return field;
-  }
-
-  const closedItemValue = {
-    notClosed: null,
-    closed: ' ',
-    flag: 'F',
-    question: '?',
-  };
-
   const array = new Array(size).fill(null);
   const [firstX, setFirstX] = useState(null);
   const [firstY, setFirstY] = useState(null);
@@ -68,12 +32,14 @@ function App() {
             <div
               key={x}
               className="item"
+
               onMouseDown={() => {
                 if (firstX === null && firstY === null) {
                   setFirstX(x);
                   setFirstY(y);
                 }
               }}
+
               onClick={() => {
                 if (itemView[y * size + x] === closedItemValue.notClosed) return;
 
@@ -110,6 +76,7 @@ function App() {
 
                 setItemView((prev) => [...prev]);
               }}
+
               onContextMenu={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
