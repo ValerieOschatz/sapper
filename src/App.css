@@ -1,5 +1,17 @@
 .App {
-  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  width: min-content;
+  margin: auto;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
 }
 
 .line {
@@ -12,4 +24,18 @@
   border: 1px solid rgb(231, 178, 178);
 }
 
-.item_hidden {}
+.counter {
+  display: flex;
+}
+
+.time {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgb(92, 78, 78);
+}
+
+.flag {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgb(92, 78, 78);
+}
