@@ -45,14 +45,77 @@
 .counter-item {
   width: 26px;
   height: 46px;
-  border: 1px solid rgb(92, 78, 78);
+  border: 1px solid black;
   box-sizing: border-box;
+  background-size: 1110%;
+}
+
+.counter-item-0 {
+  background-position: -242px 0;
+}
+
+.counter-item-1 {
+  background-position: -1px 0;
+}
+
+.counter-item-2 {
+  background-position: -27px 0;
+}
+
+.counter-item-3 {
+  background-position: -54px 0;
+}
+
+.counter-item-4 {
+  background-position: -81px 0;
+}
+
+.counter-item-5 {
+  background-position: -109px 0;
+}
+
+.counter-item-6 {
+  background-position: -136px 0;
+}
+
+.counter-item-7 {
+  background-position: -163px 0;
+}
+
+.counter-item-8 {
+  background-position: -190px 0;
+}
+
+.counter-item-9 {
+  background-position: -216px 0;
 }
 
 .button {
   box-sizing: border-box;
   width: 50px;
-  height: 52px;
+  height: 50px;
+  background-size: 550%;
+  border: none;
+}
+
+.button-ok {
+  background-position: 0 -49px;
+}
+
+.button-wait {
+  background-position: -106px -49px;
+}
+
+.button-loose {
+  background-position: -214px -49px;
+}
+
+.button-win {
+  background-position: -160px -49px;
+}
+
+.button-pressed {
+  background-position: -54px -49px;
 }
 
 .field {

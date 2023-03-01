@@ -10,6 +10,9 @@ import {
   foundBomb,
   closedItemValue,
   bombQnt,
+  buttonValue,
+  startTime,
+  endTime,
 } from './utils/variables';
 
 function App() {
@@ -20,12 +23,12 @@ function App() {
   const [itemView, setItemView] = useState(() => new Array(size * size).fill(closedItemValue.closed));
   const [loose, setLoose] = useState(false);
   const [win, setWin] = useState(false);
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(startTime);
   const [timeArr, setTimeArr] = useState([]);
   const [isCounting, setCounting] = useState(false);
-  const [flags, setFlags] = useState(40);
+  const [flags, setFlags] = useState(bombQnt);
   const [flagsArr, setFlagsArr] = useState([]);
-  const [buttonState, setButtonState] = useState('OK');
+  const [buttonState, setButtonState] = useState(buttonValue.ok);
   
   useEffect(() => {
     setField(() => createGameField(firstX, firstY));
@@ -37,7 +40,7 @@ function App() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      isCounting && setTime((time) => time <= 999 ? time += 1 : 999);
+      isCounting && setTime((time) => time <= endTime ? time += 1 : endTime);
     }, 1000)
 
     return() => {
@@ -51,13 +54,19 @@ function App() {
 
   useEffect(() => {
     if (loose) {
-      setButtonState('Fail');
+      setButtonState(buttonValue.loose);
     }
 
     if (win) {
-      setButtonState('WIN');
+      setButtonState(buttonValue.win);
     }
   }, [loose, win]);
+
+  useEffect(() => {
+    if (time === endTime) {
+      setLoose(true);
+    }
+  }, [time]);
 
   function restart() {
     setFirstX(null);
@@ -66,14 +75,15 @@ function App() {
     setItemView(() => new Array(size * size).fill(closedItemValue.closed));
     setLoose(false);
     setWin(false);
-    setTime(0);
+    setTime(startTime);
     setCounting(false);
-    setFlags(40);
-    setButtonState('OK');
+    setFlags(bombQnt);
+    setButtonState(buttonValue.ok);
   };
 
   function handleMouseDown(evt, x, y) {
     if (loose || win) return;
+    if (itemView[y * size + x] === closedItemValue.notClosed || itemView[y * size + x] === closedItemValue.flag) return;
 
     if (evt.button === 0) {
       if (firstX === null && firstY === null) {
@@ -82,7 +92,7 @@ function App() {
         
         setCounting(true);
       }
-      setButtonState('??');
+      setButtonState(buttonValue.wait);
 
       if (itemView[y * size + x] === closedItemValue.closed) {
         itemView[y * size + x] = closedItemValue.willOpen;
@@ -94,10 +104,17 @@ function App() {
     }
   };
 
+  function handleMouseLeave(x, y) {
+    if (itemView[y * size + x] === closedItemValue.willOpen) {
+      itemView[y * size + x] = closedItemValue.closed;
+      setButtonState(buttonValue.ok);
+    }
+  };
+
   function handleClick(x, y) {
     if (loose || win) return;
 
-    setButtonState('OK');
+    setButtonState(buttonValue.ok);
 
     if (itemView[y * size + x] === closedItemValue.notClosed || itemView[y * size + x] === closedItemValue.flag) return;
 
@@ -154,19 +171,18 @@ function App() {
   };
 
   function handleContextMenu(evt, x, y) {
-    if (loose || win) return;
-
     evt.preventDefault();
     evt.stopPropagation();
-
+    
+    if (loose || win) return;
     if (itemView[y * size + x] === closedItemValue.notClosed) return;
 
-    if (itemView[y * size + x] === closedItemValue.closed) {
+    if (itemView[y * size + x] === closedItemValue.closed && flags !== 0) {
       itemView[y * size + x] = closedItemValue.flag;
       setFlags((flags) => flags > 0 ? flags -= 1 : 0);
     } else if (itemView[y * size + x] === closedItemValue.flag) {
       itemView[y * size + x] = closedItemValue.question;
-      setFlags((flags) => flags < 40 ? flags += 1 : 40);
+      setFlags((flags) => flags < bombQnt ? flags += 1 : bombQnt);
     } else if (itemView[y * size + x] === closedItemValue.question) {
       itemView[y * size + x] = closedItemValue.closed;
     }
@@ -181,17 +197,22 @@ function App() {
           <div className="counter">
             {flagsArr.map((flag, index) => {
               return (
-                <div key={index} className="counter-item">{flag}</div>
+                <div key={index} className={`item counter-item counter-item-${flag}`}></div>
               )}
             )}
           </div>
 
-          <button className="button" type='button' onClick={restart}>{buttonState}</button>
+          <button
+            className={`item button button-${buttonState}`}
+            type='button'
+            onMouseDown={() => setButtonState(buttonValue.pressed)}
+            onClick={restart}>
+          </button>
 
           <div className="counter">
             {timeArr.map((time, index) => {
               return (
-                <div key={index} className="counter-item">{time}</div>
+                <div key={index} className={`item counter-item counter-item-${time}`}></div>
               )}
             )}
           </div>
@@ -217,6 +238,10 @@ function App() {
 
                     onMouseDown={(evt) => {
                       handleMouseDown(evt, x, y);
+                    }}
+
+                    onMouseLeave={() => {
+                      handleMouseLeave(x, y);
                     }}
 
                     onClick={() => {
