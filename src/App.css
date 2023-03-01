@@ -58,8 +58,8 @@
 .field {
   margin-top: 12px;
   box-sizing: border-box;
-  border-top: 4px solid rgb(172, 172, 172);
-  border-left: 4px solid rgb(172, 172, 172);
+  border-top: 4px solid rgb(119, 119, 119);
+  border-left: 4px solid rgb(119, 119, 119);
   border-right: 4px solid rgb(255, 255, 255);
   border-bottom: 4px solid rgb(255, 255, 255);
 }

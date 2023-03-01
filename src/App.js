@@ -7,6 +7,7 @@ import {
   size,
   bomb,
   closedItemValue,
+  bombQnt,
 } from './utils/variables';
 
 function App() {
@@ -17,15 +18,13 @@ function App() {
   const [itemView, setItemView] = useState(() => new Array(size * size).fill(closedItemValue.closed));
   const [loose, setLoose] = useState(false);
   const [win, setWin] = useState(false);
-  // const itemClassName = `item ${isHidden && 'item_hidden'}`;
   const [time, setTime] = useState(0);
   const [timeArr, setTimeArr] = useState([]);
   const [isCounting, setCounting] = useState(false);
-
   const [flags, setFlags] = useState(40);
   const [flagsArr, setFlagsArr] = useState([]);
-
   const [buttonState, setButtonState] = useState('OK');
+  // const itemClassName = `item ${isHidden && 'item_hidden'}`;
   
   useEffect(() => {
     setField(() => createGameField(firstX, firstY));
@@ -70,28 +69,113 @@ function App() {
     setCounting(false);
     setFlags(40);
     setButtonState('OK');
-  }
+  };
+
+  function handleMouseDown(evt, x, y) {
+    if (loose || win) return;
+
+    if (evt.button === 0) {
+      if (firstX === null && firstY === null) {
+        setFirstX(x);
+        setFirstY(y);
+        
+        setCounting(true);
+      }
+      setButtonState('??');
+    }
+  };
+
+  function handleClick(x, y) {
+    if (loose || win) return;
+
+    setButtonState('OK');
+
+    if (itemView[y * size + x] === closedItemValue.notClosed) return;
+
+    const openingArr = [];
+
+    function openItem(x, y) {
+      if (x >= 0 && x < size && y >= 0 && y < size) {
+        if (itemView[y * size + x] === closedItemValue.notClosed) return;
+        openingArr.push([x, y]);
+      }
+    }
+
+    openItem(x, y);
+
+    while (openingArr.length) {
+      const [x, y] = openingArr.pop();
+      itemView[y * size + x] = closedItemValue.notClosed;
+      if (field[y * size + x] !== 0) continue;
+      openItem(x + 1, y);
+      openItem(x - 1, y);
+      openItem(x, y + 1);
+      openItem(x, y - 1);
+    }
+
+    if (field[y * size + x] === bomb) {
+      field.forEach((item, index) => {
+        if (item === bomb) {
+          itemView[index] = closedItemValue.notClosed;
+        }
+      })
+      setLoose(true);
+      setCounting(false);
+    }
+
+    if (field[y * size + x] !== bomb) {
+      const openedItemsQnt = itemView.filter((item) => item === closedItemValue.notClosed).length;
+      
+      if (openedItemsQnt === size * size - bombQnt) {
+        setWin(true);
+        setCounting(false);
+      }
+    }
+
+    setItemView((prev) => [...prev]);
+  };
+
+  function handleContextMenu(evt, x, y) {
+    if (loose || win) return;
+
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    if (itemView[y * size + x] === closedItemValue.notClosed) return;
+
+    if (itemView[y * size + x] === closedItemValue.closed) {
+      itemView[y * size + x] = closedItemValue.flag;
+      setFlags((flags) => flags > 0 ? flags -= 1 : 0);
+    } else if (itemView[y * size + x] === closedItemValue.flag) {
+      itemView[y * size + x] = closedItemValue.question;
+      setFlags((flags) => flags < 40 ? flags += 1 : 40);
+    } else if (itemView[y * size + x] === closedItemValue.question) {
+      itemView[y * size + x] = closedItemValue.closed;
+    }
+
+    setItemView((prev) => [...prev]);
+  };
 
   return (
     <div className="App">
       <div className="content">
         <div className="menu">
           <div className="counter">
-          {flagsArr.map((flag, index) => {
-            return (
-              <div key={index} className="item counter-item">{flag}</div>
+            {flagsArr.map((flag, index) => {
+              return (
+                <div key={index} className="counter-item">{flag}</div>
+              )}
             )}
-          )}
           </div>
 
           <button className="button" type='button' onClick={restart}>{buttonState}</button>
 
           <div className="counter">
-          {timeArr.map((time, index) => {
-            return (
-              <div key={index} className="item counter-item">{time}</div>
+            {timeArr.map((time, index) => {
+              return (
+                <div key={index} className="counter-item">{time}</div>
+              )}
             )}
-          )}
           </div>
         </div>
 
@@ -101,92 +185,26 @@ function App() {
             <div key={y} className="line">
               {array.map((_, x) => {
                 return (
-                <div
-                  key={x}
-                  className="item field-item"
+                  <div
+                    key={x}
+                    className="item field-item"
 
-                  onMouseDown={() => {
-                    if (loose) return;
+                    onMouseDown={(evt) => {
+                      handleMouseDown(evt, x, y);
+                    }}
 
-                    if (firstX === null && firstY === null) {
-                      setFirstX(x);
-                      setFirstY(y);
-                      setCounting(true);
-                    }
+                    onClick={() => {
+                      handleClick(x, y);
+                    }}
 
-                    setButtonState('??');
-                  }}
-
-                  onClick={() => {
-                    if (loose) return;
-
-                    setButtonState('OK');
-
-                    if (itemView[y * size + x] === closedItemValue.notClosed) return;
-
-                    const openingArr = [];
-
-                    function openItem(x, y) {
-                      if (x >= 0 && x < size && y >= 0 && y < size) {
-                        if (itemView[y * size + x] === closedItemValue.notClosed) return;
-                        openingArr.push([x, y]);
-                      }
-                    }
-
-                    openItem(x, y);
-
-                    while (openingArr.length) {
-                      const [x, y] = openingArr.pop();
-                      itemView[y * size + x] = closedItemValue.notClosed;
-                      if (field[y * size + x] !== 0) continue;
-                      openItem(x + 1, y);
-                      openItem(x - 1, y);
-                      openItem(x, y + 1);
-                      openItem(x, y - 1);
-                    }
-
-                    if (field[y * size + x] === bomb) {
-                      field.forEach((item, index) => {
-                        if (item === bomb) {
-                          itemView[index] = closedItemValue.notClosed;
-                        }
-                      })
-                      setCounting(false);
-                      setLoose(true);
-                    }
-
-                    setItemView((prev) => [...prev]);
-                  }}
-
-                  onContextMenu={(e) => {
-                    if (loose) return;
-
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    if (firstX === null && firstY === null) {
-                      setCounting(false);
-                    }
-
-                    if (itemView[y * size + x] === closedItemValue.notClosed) return;
-
-                    if (itemView[y * size + x] === closedItemValue.closed) {
-                      itemView[y * size + x] = closedItemValue.flag;
-                      setFlags((flags) => flags > 0 ? flags -= 1 : 0);
-                    } else if (itemView[y * size + x] === closedItemValue.flag) {
-                      itemView[y * size + x] = closedItemValue.question;
-                      setFlags((flags) => flags < 40 ? flags += 1 : 40);
-                    } else if (itemView[y * size + x] === closedItemValue.question) {
-                      itemView[y * size + x] = closedItemValue.closed;
-                    }
-
-                    setItemView((prev) => [...prev]);
-                  }}
-                  >
-                    {itemView[y * size + x] !== closedItemValue.notClosed ?
-                    itemView[y * size + x] :
-                    field[y * size + x]}
-                </div>
+                    onContextMenu={(evt) => {
+                      handleContextMenu(evt, x, y);
+                    }}
+                    >
+                      {itemView[y * size + x] !== closedItemValue.notClosed ?
+                      itemView[y * size + x] :
+                      field[y * size + x]}
+                  </div>
                 );
               })}
             </div>)
