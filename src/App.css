@@ -73,5 +73,72 @@
   height: 32px;
   border: 1px solid transparent;
   box-sizing: border-box;
-  background-position: 0 -102px;
+}
+
+.field-item-closed {
+  background-position: 0px -102px;
+}
+
+.field-item-will-open {
+  background-position: -34px -103px;
+}
+
+.field-item-flag {
+  background-position: -68px -102px;
+}
+
+.field-item-question {
+  background-position: -102px -102px;
+}
+
+.field-item-will-open-question {
+  background-position: -136px -102px;
+}
+
+.field-item-0 {
+  background-position: -34px -103px;
+}
+
+.field-item-1 {
+  background-position: 0 -137px;
+}
+
+.field-item-2 {
+  background-position: -34px -137px;
+}
+
+.field-item-3 {
+  background-position: -68px -137px;
+}
+
+.field-item-4 {
+  background-position: -102px -137px;
+}
+
+.field-item-5 {
+  background-position: -136px -137px;
+}
+
+.field-item-6 {
+  background-position: -170px -137px;
+}
+
+.field-item-7 {
+  background-position: -204px -137px;
+}
+
+.field-item-8 {
+  background-position: -238px -137px;
+}
+
+.field-item-bomb {
+  background-position: -170px -103px;
+}
+
+.field-item-current-bomb {
+  background-position: -204px -103px;
+}
+
+.field-item-found-bomb {
+  background-position: -238px -103px;
 }

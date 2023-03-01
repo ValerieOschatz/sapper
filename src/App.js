@@ -6,6 +6,8 @@ import createGameField from './utils/createGameField';
 import {
   size,
   bomb,
+  currentBomb,
+  foundBomb,
   closedItemValue,
   bombQnt,
 } from './utils/variables';
@@ -24,7 +26,6 @@ function App() {
   const [flags, setFlags] = useState(40);
   const [flagsArr, setFlagsArr] = useState([]);
   const [buttonState, setButtonState] = useState('OK');
-  // const itemClassName = `item ${isHidden && 'item_hidden'}`;
   
   useEffect(() => {
     setField(() => createGameField(firstX, firstY));
@@ -82,6 +83,14 @@ function App() {
         setCounting(true);
       }
       setButtonState('??');
+
+      if (itemView[y * size + x] === closedItemValue.closed) {
+        itemView[y * size + x] = closedItemValue.willOpen;
+      }
+
+      if (itemView[y * size + x] === closedItemValue.question) {
+        itemView[y * size + x] = closedItemValue.willOpenQuestion;
+      }
     }
   };
 
@@ -90,7 +99,7 @@ function App() {
 
     setButtonState('OK');
 
-    if (itemView[y * size + x] === closedItemValue.notClosed) return;
+    if (itemView[y * size + x] === closedItemValue.notClosed || itemView[y * size + x] === closedItemValue.flag) return;
 
     const openingArr = [];
 
@@ -114,11 +123,20 @@ function App() {
     }
 
     if (field[y * size + x] === bomb) {
+      field[y * size + x] = currentBomb;
+
+      itemView.forEach((item, index) => {
+        if (item === closedItemValue.flag) {
+          field[index] = foundBomb;
+        }
+      })
+
       field.forEach((item, index) => {
-        if (item === bomb) {
+        if (item === bomb || item === foundBomb) {
           itemView[index] = closedItemValue.notClosed;
         }
       })
+
       setLoose(true);
       setCounting(false);
     }
@@ -187,7 +205,15 @@ function App() {
                 return (
                   <div
                     key={x}
-                    className="item field-item"
+                    className={`
+                      item field-item 
+                      ${itemView[y * size + x] === closedItemValue.closed && 'field-item-closed'} 
+                      ${itemView[y * size + x] === closedItemValue.willOpen && 'field-item-will-open'} 
+                      ${itemView[y * size + x] === closedItemValue.flag && 'field-item-flag'} 
+                      ${itemView[y * size + x] === closedItemValue.question && 'field-item-question'} 
+                      ${itemView[y * size + x] === closedItemValue.willOpenQuestion && 'field-item-will-open-question'} 
+                      ${itemView[y * size + x] === closedItemValue.notClosed && `field-item-${field[y * size + x]}`}
+                    `}
 
                     onMouseDown={(evt) => {
                       handleMouseDown(evt, x, y);
@@ -201,9 +227,6 @@ function App() {
                       handleContextMenu(evt, x, y);
                     }}
                     >
-                      {itemView[y * size + x] !== closedItemValue.notClosed ?
-                      itemView[y * size + x] :
-                      field[y * size + x]}
                   </div>
                 );
               })}
