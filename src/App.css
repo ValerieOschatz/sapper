@@ -1,5 +1,6 @@
 .App {
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: bisque;
@@ -39,7 +40,7 @@
 .item {
   background-image: url(./images/sprite.png);
   background-repeat: no-repeat;
-  background-size: 920%;
+  background-size: 275px;
 }
 
 .counter-item {
@@ -47,75 +48,73 @@
   height: 46px;
   border: 1px solid black;
   box-sizing: border-box;
-  background-size: 1110%;
 }
 
 .counter-item-0 {
-  background-position: -242px 0;
+  background-position: right 0 top -1px;
 }
 
 .counter-item-1 {
-  background-position: -1px 0;
+  background-position: -1px -1px;
 }
 
 .counter-item-2 {
-  background-position: -27px 0;
+  background-position: -29px -1px;
 }
 
 .counter-item-3 {
-  background-position: -54px 0;
+  background-position: -57px -1px;
 }
 
 .counter-item-4 {
-  background-position: -81px 0;
+  background-position: -85px -1px;
 }
 
 .counter-item-5 {
-  background-position: -109px 0;
+  background-position: -112px -1px;
 }
 
 .counter-item-6 {
-  background-position: -136px 0;
+  background-position: -139px -1px;
 }
 
 .counter-item-7 {
-  background-position: -163px 0;
+  background-position: -168px -1px;
 }
 
 .counter-item-8 {
-  background-position: -190px 0;
+  background-position: -195px -1px;
 }
 
 .counter-item-9 {
-  background-position: -216px 0;
+  background-position: -223px -1px;
 }
 
 .button {
   box-sizing: border-box;
   width: 50px;
   height: 50px;
-  background-size: 550%;
   border: none;
 }
 
 .button-ok {
-  background-position: 0 -49px;
+  background-position: -1px -49px;
 }
 
 .button-wait {
-  background-position: -106px -49px;
+  background-position: -108px -49px;
 }
 
 .button-loose {
-  background-position: -214px -49px;
+  background-position: -215px -49px;
 }
 
 .button-win {
-  background-position: -160px -49px;
+  background-position: -161px -49px;
 }
 
 .button-pressed {
-  background-position: -54px -49px;
+  background-position: -55px -49px;
 }
 
 .field {
@@ -139,19 +138,19 @@
 }
 
 .field-item-closed {
-  background-position: 0px -102px;
+  background-position: 0 -101px;
 }
 
 .field-item-will-open {
-  background-position: -34px -103px;
+  background-position: -36px -102px;
 }
 
 .field-item-flag {
-  background-position: -68px -102px;
+  background-position: -67px -101px;
 }
 
 .field-item-question {
-  background-position: -102px -102px;
+  background-position: -101px -101px;
 }
 
 .field-item-will-open-question {
@@ -159,49 +158,49 @@
 }
 
 .field-item-0 {
-  background-position: -34px -103px;
+  background-position: -35px -102px;
 }
 
 .field-item-1 {
-  background-position: 0 -137px;
+  background-position: -1px -136px;
 }
 
 .field-item-2 {
-  background-position: -34px -137px;
+  background-position: -35px -136px;
 }
 
 .field-item-3 {
-  background-position: -68px -137px;
+  background-position: -69px -136px;
 }
 
 .field-item-4 {
-  background-position: -102px -137px;
+  background-position: -103px -136px;
 }
 
 .field-item-5 {
-  background-position: -136px -137px;
+  background-position: -137px -136px;
 }
 
 .field-item-6 {
-  background-position: -170px -137px;
+  background-position: -171px -136px;
 }
 
 .field-item-7 {
-  background-position: -204px -137px;
+  background-position: -205px -136px;
 }
 
 .field-item-8 {
-  background-position: -238px -137px;
+  background-position: -239px -136px;
 }
 
 .field-item-bomb {
-  background-position: -170px -103px;
+  background-position: -169px -102px;
 }
 
 .field-item-current-bomb {
-  background-position: -204px -103px;
+  background-position: -203px -102px;
 }
 
 .field-item-found-bomb {
-  background-position: -238px -103px;
+  background-position: -237px -102px;
 }

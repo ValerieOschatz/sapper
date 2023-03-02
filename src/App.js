@@ -40,7 +40,7 @@ function App() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      isCounting && setTime((time) => time <= endTime ? time += 1 : endTime);
+      isCounting && setTime((time) => time < endTime ? time += 1 : endTime);
     }, 1000)
 
     return() => {
@@ -65,8 +65,20 @@ function App() {
   useEffect(() => {
     if (time === endTime) {
       setLoose(true);
+
+      itemView.forEach((item, index) => {
+        if (item === closedItemValue.flag && field[index] === bomb) {
+          field[index] = foundBomb;
+        }
+      })
+
+      field.forEach((item, index) => {
+        if (item === bomb || item === foundBomb) {
+          itemView[index] = closedItemValue.notClosed;
+        }
+      })
     }
-  }, [time]);
+  }, [time, field, itemView]);
 
   function restart() {
     setFirstX(null);
@@ -109,6 +121,11 @@ function App() {
       itemView[y * size + x] = closedItemValue.closed;
       setButtonState(buttonValue.ok);
     }
+
+    if (itemView[y * size + x] === closedItemValue.willOpenQuestion) {
+      itemView[y * size + x] = closedItemValue.question;
+      setButtonState(buttonValue.ok);
+    }
   };
 
   function handleClick(x, y) {
@@ -143,7 +160,7 @@ function App() {
       field[y * size + x] = currentBomb;
 
       itemView.forEach((item, index) => {
-        if (item === closedItemValue.flag) {
+        if (item === closedItemValue.flag && field[index] === bomb) {
           field[index] = foundBomb;
         }
       })

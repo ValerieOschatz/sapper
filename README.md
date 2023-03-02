@@ -1,3 +1,14 @@
+# sapper
+
+### [Ссылка на проект на gh-pages](https://valerieoschatz.github.io/sapper/)
+
+### Локальный запуск проекта
+
+`npm i` — установка зависимостей  
+`npm run start` — запуск приложения  
+
+
+### Ниже инструкция react
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
