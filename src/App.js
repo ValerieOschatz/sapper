@@ -154,6 +154,10 @@ function App() {
       openItem(x - 1, y);
       openItem(x, y + 1);
       openItem(x, y - 1);
+      openItem(x + 1, y - 1);
+      openItem(x - 1, y - 1);
+      openItem(x + 1, y + 1);
+      openItem(x - 1, y + 1);
     }
 
     if (field[y * size + x] === bomb) {
