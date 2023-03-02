@@ -14,7 +14,7 @@ function createGameField(firstX, firstY) {
     }
   }
 
-  for (let i = 0; i <= bombQnt;) {
+  for (let i = 1; i <= bombQnt;) {
     const x = Math.floor(Math.random() * size);
     const y = Math.floor(Math.random() * size);
 
