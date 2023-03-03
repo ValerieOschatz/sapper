@@ -29,6 +29,10 @@ function App() {
   const [flags, setFlags] = useState(bombQnt);
   const [flagsArr, setFlagsArr] = useState([]);
   const [buttonState, setButtonState] = useState(buttonValue.ok);
+
+  useEffect(() => {
+    setField(array);
+  }, []);
   
   useEffect(() => {
     setField(() => createGameField(firstX, firstY));
@@ -179,7 +183,7 @@ function App() {
       setCounting(false);
     }
 
-    if (field[y * size + x] !== bomb) {
+    if (field[y * size + x] !== currentBomb) {
       const openedItemsQnt = itemView.filter((item) => item === closedItemValue.notClosed).length;
       
       if (openedItemsQnt === size * size - bombQnt) {
