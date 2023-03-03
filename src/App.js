@@ -29,10 +29,6 @@ function App() {
   const [flags, setFlags] = useState(bombQnt);
   const [flagsArr, setFlagsArr] = useState([]);
   const [buttonState, setButtonState] = useState(buttonValue.ok);
-
-  useEffect(() => {
-    setField(array);
-  }, []);
   
   useEffect(() => {
     setField(() => createGameField(firstX, firstY));
