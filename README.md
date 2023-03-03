@@ -1,6 +1,6 @@
 # sapper
 
-### [Ссылка на проект на gh-pages](https://valerieoschatz.github.io/sapper/)
+### [Ссылка на сайт](https://valerieoschatz.github.io/sapper/)
 
 ### Локальный запуск проекта
 
