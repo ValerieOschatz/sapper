@@ -19,9 +19,7 @@ function createGameField(firstX, firstY) {
     const y = Math.floor(Math.random() * size);
 
     if (field[y * size + x] === bomb || (x === firstX && y === firstY)) continue;
-
     field[y * size + x] = bomb;
-
     i += 1;
 
     increment(x + 1, y);
@@ -33,7 +31,6 @@ function createGameField(firstX, firstY) {
     increment(x + 1, y + 1);
     increment(x - 1, y + 1);
   }
-
   return field;
 }
 

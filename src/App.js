@@ -101,7 +101,6 @@ function App() {
       if (firstX === null && firstY === null) {
         setFirstX(x);
         setFirstY(y);
-        
         setCounting(true);
       }
       setButtonState(buttonValue.wait);
@@ -130,11 +129,8 @@ function App() {
 
   function handleClick(x, y) {
     if (loose || win) return;
-
-    setButtonState(buttonValue.ok);
-
     if (itemView[y * size + x] === closedItemValue.notClosed || itemView[y * size + x] === closedItemValue.flag) return;
-
+    setButtonState(buttonValue.ok);
     const openingArr = [];
 
     function openItem(x, y) {
